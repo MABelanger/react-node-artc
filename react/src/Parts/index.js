@@ -43,8 +43,7 @@ const Parts = (props) => {
             <th>Add</th>
           </tr>
         </tbody>
-        <SubjectForm onAddSubject={handleAddSubject}
-        />
+        <SubjectForm onAddSubject={handleAddSubject} />
         <Subjects  subjects={props.subjects}
                    onAddSubSubject={handleAddSubSubject}
                    onAddSubModality={handleAddSubModality}
