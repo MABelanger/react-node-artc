@@ -39,18 +39,22 @@ function Subject({ subject, onAddSubSubject, onAddSubModality, onDelSubSubject, 
     return (
       <div>
         {subjectHeader}
+        <SubSubjectForm onAddSubSubject={ (subSubject) => { handleAddSubSubject(subject, subSubject)} } />
         <ul>
         {
-          subSubjects && subSubjects.map((subSubject, index) => {
+          subSubjects && subSubjects.slice(0).reverse().map((subSubject, indexMap) => {
+            let index = subSubjects.length - indexMap - 1;
             const subSubjectHeader = subSubject.header;
             const subModalities = subSubject.subModalities;
             return (
               <li key={index}>
                 {subSubjectHeader}
                 <button onClick={()=>{ handleDelSubSubject(subSubjects, index)} }>X</button>
+                <SubmodalityForm onAddSubModality={ (subModality) => { handleAddSubModality(subSubject, subModality)} } />
                 <ul>
                   {
-                    subModalities && subModalities.map((subModality, index)=>{
+                    subModalities && subModalities.slice(0).reverse().map((subModality, indexMap)=>{
+                      let index = subModalities.length - indexMap - 1;
                       return (
                         <li key={index}>
                           {subModality}
@@ -60,13 +64,11 @@ function Subject({ subject, onAddSubSubject, onAddSubModality, onDelSubSubject, 
                     })
                   }
                 </ul>
-                <SubmodalityForm onAddSubModality={ (subModality) => { handleAddSubModality(subSubject, subModality)} } />
               </li>
             )
           })
         }
         </ul>
-        <SubSubjectForm onAddSubSubject={ (subSubject) => { handleAddSubSubject(subject, subSubject)} } />
       </div>
     );
   }
@@ -94,7 +96,8 @@ function Subject({ subject, onAddSubSubject, onAddSubModality, onDelSubSubject, 
 }
 
 function Subjects({ subjects, onAddSubSubject, onAddSubModality, onDelSubSubject, onDelSubModality, onDelSubject }) {
-  return subjects.map((subject, index) => {
+  return subjects.slice(0).reverse().map((subject, indexMap) => {
+    let index = subjects.length - indexMap - 1;
     return (
       <Subject key={index}
                subject={subject}

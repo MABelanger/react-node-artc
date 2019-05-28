@@ -43,6 +43,8 @@ const Parts = (props) => {
             <th>Add</th>
           </tr>
         </tbody>
+        <SubjectForm onAddSubject={handleAddSubject}
+        />
         <Subjects  subjects={props.subjects}
                    onAddSubSubject={handleAddSubSubject}
                    onAddSubModality={handleAddSubModality}
@@ -50,8 +52,6 @@ const Parts = (props) => {
                    onDelSubModality={handleDelSubModality}
                    onDelSubject={handleDelSubject}
 
-        />
-        <SubjectForm onAddSubject={handleAddSubject}
         />
       </table>
     </div>
