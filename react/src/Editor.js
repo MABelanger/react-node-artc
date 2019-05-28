@@ -3,11 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Parts from './Parts';
 import QtSections from './QtSections';
 
-import jsonQtapSections from './mocks/qtSections.json';
-
-
-function promiseSubjects(){
-  return fetch('/subjects.json',{
+function promiseFetch(url){
+  return fetch(url,{
     credentials: 'include'
   })
     .then(async (response)=>{
@@ -58,10 +55,12 @@ function downloadJson (data, fileName) {
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
   const [part, setPart] = useState({up:[], down:[]});
+  const [qtSections, setQtSections] = useState([]);
 
   useEffect(() => {
     console.log('componentDidMount');
-    promiseSubjects().then((subjects) => {
+
+    promiseFetch('/subjects.json').then((subjects) => {
       const initSubjects = (subjects.up && subjects.down) ? subjects : {};
       if(!subjects.error) {
         setPart(initSubjects)
@@ -69,6 +68,16 @@ const Editor = (props) => {
         setPart({})
       }
     });
+
+    promiseFetch('/qtSections.json').then((qtSections) => {
+      const initQtSections = (qtSections.length > 0 ) ? qtSections : [];
+      if(!qtSections.error) {
+        setQtSections(initQtSections)
+      } else {
+        setQtSections([])
+      }
+    });
+
   }, []);
 
   function renderHidden() {
@@ -93,7 +102,7 @@ const Editor = (props) => {
     <div>
       { isPrintMode && renderHidden() }
 
-      <QtSections qtSections={jsonQtapSections || []}/>
+      <QtSections qtSections={qtSections || []}/>
 
       <Parts
         title={'up'}

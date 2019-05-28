@@ -35,6 +35,18 @@ function sendSubjectsJson(res) {
   });
 }
 
+function sendQtSectionsJson(res) {
+  var usersFilePath = path.join(__dirname, '/db/qtSections.json');
+  fs.access(usersFilePath, fs.constants.F_OK, (err) => {
+    if(err) {
+      res.json([]);
+    } else {
+      var readable = fs.createReadStream(usersFilePath);
+      readable.pipe(res);
+    }
+  });
+}
+
 function sendUserJson(res, user) {
   return res.status(200).json(user);
 }
@@ -147,6 +159,15 @@ app.get('/subjects.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     sendSubjectsJson(res);
+  } else {
+    sendNeedToLogin(res);
+  }
+});
+
+app.get('/qtSections.json', function(req, res){
+  var isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    sendQtSectionsJson(res);
   } else {
     sendNeedToLogin(res);
   }
