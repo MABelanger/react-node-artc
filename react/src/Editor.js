@@ -104,6 +104,22 @@ const Editor = (props) => {
 
       <QtSections qtSections={qtSections || []}/>
 
+      <button onClick={()=>{
+        postData('/subjects.json', part)
+          .then((response) => {
+            console.log('ok')
+          }) // JSON-string from `response.json()` call
+          .catch((error) => {
+            console.error(error)
+          });
+      }}>POST</button>
+      <br/>
+      <br/>
+      <div onClick={()=>{
+        console.log('isPrintMode', isPrintMode);
+        setPrintMode(!isPrintMode);
+      }}>printMode</div>
+
       <Parts
         title={'up'}
         subjects={part.up}
@@ -119,21 +135,6 @@ const Editor = (props) => {
       <button onClick={()=>{
         downloadJson(part, 'subjects.json');
       }}>download</button>
-
-      <button onClick={()=>{
-        postData('/subjects.json', part)
-          .then((response) => {
-            console.log('ok')
-          }) // JSON-string from `response.json()` call
-          .catch((error) => {
-            console.error(error)
-          });
-      }}>POST</button>
-
-      <div onClick={()=>{
-        console.log('isPrintMode', isPrintMode);
-        setPrintMode(!isPrintMode);
-      }}>printMode</div>
 
       <br/>
       <br/>
