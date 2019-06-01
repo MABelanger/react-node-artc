@@ -6,6 +6,8 @@ import QtSection from './QtSection';
 import NavTabs from './NavTabs';
 import * as apiUtils from './apiUtils';
 
+const PART_UP_JSON_NAME = 'part_up.json';
+const PART_DOWN_JSON_NAME = 'part_down.json';
 
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
@@ -13,7 +15,7 @@ const Editor = (props) => {
   const [partDownSubjects, setPartDownSubjects] = useState([]);
 
   useEffect(() => {
-    apiUtils.promiseFetch('part_up.json').then((subjects) => {
+    apiUtils.promiseFetch(PART_UP_JSON_NAME).then((subjects) => {
       const initSubjects = (subjects) ? subjects : [];
       if(!subjects.error) {
         setPartUpSubjects(initSubjects);
@@ -21,7 +23,7 @@ const Editor = (props) => {
         setPartUpSubjects([]);
       }
     });
-    apiUtils.promiseFetch('part_down.json').then((subjects) => {
+    apiUtils.promiseFetch(PART_DOWN_JSON_NAME).then((subjects) => {
       const initSubjects = (subjects) ? subjects : [];
       if(!subjects.error) {
         setPartDownSubjects(initSubjects);
@@ -75,8 +77,8 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{ apiUtils.handlePost('part_up.json', partUpSubjects)} }
-              onDownload={()=>{ apiUtils.handleDownload('part_up.json', partUpSubjects)} }
+              onPost={()=>{ apiUtils.handlePost(PART_UP_JSON_NAME, partUpSubjects)} }
+              onDownload={()=>{ apiUtils.handleDownload(PART_UP_JSON_NAME, partUpSubjects)} }
               subjects={partUpSubjects}
               onSetSubjects={handleSetPartUpInitSubjects}
             />
@@ -88,8 +90,8 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{ apiUtils.handlePost('part_down.json', partDownSubjects)} }
-              onDownload={()=>{ apiUtils.handleDownload('part_down.json', partDownSubjects)} }
+              onPost={()=>{ apiUtils.handlePost(PART_DOWN_JSON_NAME, partDownSubjects)} }
+              onDownload={()=>{ apiUtils.handleDownload(PART_DOWN_JSON_NAME, partDownSubjects)} }
               subjects={partDownSubjects}
               onSetSubjects={handleSetPartDownInitSubjects}
             />
