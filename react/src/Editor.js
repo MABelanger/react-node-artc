@@ -75,8 +75,8 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{apiUtils.handlePost('part_up.json', partUpSubjects)}}
-              onDownload={()=>{apiUtils.handleDownload('part_up.json', partUpSubjects)}}
+              onPost={()=>{ apiUtils.handlePost('part_up.json', partUpSubjects)} }
+              onDownload={()=>{ apiUtils.handleDownload('part_up.json', partUpSubjects)} }
               subjects={partUpSubjects}
               onSetSubjects={handleSetPartUpInitSubjects}
             />
@@ -88,8 +88,8 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{apiUtils.handlePost('part_down.json', partDownSubjects)}}
-              onDownload={()=>{apiUtils.handleDownload('part_down.json', partDownSubjects)}}
+              onPost={()=>{ apiUtils.handlePost('part_down.json', partDownSubjects)} }
+              onDownload={()=>{ apiUtils.handleDownload('part_down.json', partDownSubjects)} }
               subjects={partDownSubjects}
               onSetSubjects={handleSetPartDownInitSubjects}
             />
