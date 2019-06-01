@@ -77,10 +77,10 @@ function Subject({ subject, onAddSubSubject, onAddSubModality, onDelSubSubject, 
   return(
       <tr>
         <td className={style['td-width']}>
-          { renderHeader(subject.doWant) }
+          { renderHeader(subject.dontWant) }
         </td>
         <td className={style['td-width']}>
-          { renderHeader(subject.dontWant) }
+          { renderHeader(subject.doWant) }
         </td>
         <td className={style['td-width']}>
           { renderHeader(subject.whoAmI) }
