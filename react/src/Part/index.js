@@ -1,37 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PostButton from './PostButton';
+import DownloadButton from './DownloadButton';
 import SubjectForm from '../SubjectForm';
 import Subjects from '../Subjects';
+import * as apiUtils from '../apiUtils';
 
 const Part = (props) => {
+
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    setSubjects(props.initSubjects)
+  }, [props.initSubjects]);
+
   function handleAddSubject(subject) {
-    props.onChangeSubject([...props.subjects, subject]);
+    setSubjects([...subjects, subject]);
   }
 
   function handleDelSubject(index){
-    props.subjects.splice(index, 1);
-    props.onChangeSubject([...props.subjects]);
+    subjects.splice(index, 1);
+    setSubjects([...subjects]);
   }
 
   function handleAddSubSubject(){
-    props.onChangeSubject([...props.subjects]);
+    setSubjects([...subjects]);
   }
 
   function handleAddSubModality(){
-    props.onChangeSubject([...props.subjects]);
+    setSubjects([...subjects]);
   }
 
   function handleDelSubSubject() {
     console.log('handleDelSubSubject')
-    props.onChangeSubject([...props.subjects]);
+    setSubjects([...subjects]);
   }
 
   function handleDelSubModality() {
     console.log('handleDelSubModality')
-    props.onChangeSubject([...props.subjects]);
+    setSubjects([...subjects]);
   }
 
   return (
     <div>
+
+      <PostButton
+        data={subjects}
+        title={props.title}
+        jsonName={props.jsonName}
+      />
+
+      <DownloadButton
+        data={subjects}
+        title={props.title}
+        jsonName={props.jsonName}
+      />
+
       <h1>{props.title}</h1>
       <table>
         <tbody>
@@ -44,7 +67,7 @@ const Part = (props) => {
           </tr>
         </tbody>
         <SubjectForm onAddSubject={handleAddSubject} />
-        <Subjects  subjects={props.subjects}
+        <Subjects  subjects={subjects}
                    onAddSubSubject={handleAddSubSubject}
                    onAddSubModality={handleAddSubModality}
                    onDelSubSubject={handleDelSubSubject}

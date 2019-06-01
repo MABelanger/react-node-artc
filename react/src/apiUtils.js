@@ -14,7 +14,7 @@ export function promiseFetch(url){
     })
 }
 
-export function postData(url = ``, data = {}) {
+export function postData(url = ``, data = []) {
   // Default options are marked with *
     return fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.

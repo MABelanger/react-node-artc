@@ -23,20 +23,8 @@ if(process.env.USERS){
   USERS = JSON.parse(process.env.USERS);
 }
 
-function sendSubjectsJson(res) {
-  var usersFilePath = path.join(__dirname, '/db/subjects.json');
-  fs.access(usersFilePath, fs.constants.F_OK, (err) => {
-    if(err) {
-      res.json([]);
-    } else {
-      var readable = fs.createReadStream(usersFilePath);
-      readable.pipe(res);
-    }
-  });
-}
-
-function sendQtSectionsJson(res) {
-  var usersFilePath = path.join(__dirname, '/db/qtSections.json');
+function resGetJson(res, dbJson) {
+  var usersFilePath = path.join(__dirname, dbJson);
   fs.access(usersFilePath, fs.constants.F_OK, (err) => {
     if(err) {
       res.json([]);
@@ -51,7 +39,7 @@ function sendUserJson(res, user) {
   return res.status(200).json(user);
 }
 
-function sendNeedToLogin(res) {
+function resGetNeedToLogin(res) {
   var error = {
     error : 'need to login!'
   }
@@ -155,34 +143,52 @@ function logMedia(req, res, next) {
 
 
 // private subjects.json
-app.get('/subjects.json', function(req, res){
+app.get('/part_up.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
-    sendSubjectsJson(res);
+    resGetJson(res, '/db/part_up.json');
   } else {
-    sendNeedToLogin(res);
+    resGetNeedToLogin(res);
+  }
+});
+
+app.get('/part_down.json', function(req, res){
+  var isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    resGetJson(res, '/db/part_down.json');
+  } else {
+    resGetNeedToLogin(res);
   }
 });
 
 app.get('/qtSections.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
-    sendQtSectionsJson(res);
+    resGetJson(res, '/db/qtSections.json');
   } else {
-    sendNeedToLogin(res);
+    resGetNeedToLogin(res);
   }
 });
 
-app.post('/subjects.json', function(req, res, next) {
-  let subjectsDir = path.join(__dirname, 'db', 'subjects.json');
+
+function resPostJson(req, res, dbJson) {
+  let partDir = path.join(__dirname, dbJson);
   const data = req.body;
-  fs.writeFile(subjectsDir, JSON.stringify(data), function (err) {
+  fs.writeFile(partDir, JSON.stringify(data), function (err) {
     if (err) {
       res.status(403).json(err);
     } else {
       res.status(200).json({message: 'file saved'});
     }
   });
+}
+
+app.post('/part_up.json', function(req, res, next) {
+  resPostJson(req, res, '/db/part_up.json')
+});
+
+app.post('/part_down.json', function(req, res, next) {
+  resPostJson(req, res, '/db/part_down.json')
 });
 
 app.get('/user', function(req, res){
@@ -193,7 +199,7 @@ app.get('/user', function(req, res){
     console.log('res.locals.ua', res.locals.ua);
     sendUserJson(res, user);
   } else {
-    sendNeedToLogin(res);
+    resGetNeedToLogin(res);
   }
 });
 

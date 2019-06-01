@@ -7,37 +7,31 @@ import NavTabs from './NavTabs';
 import * as apiUtils from './apiUtils';
 
 
-// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
-function downloadJson (data, fileName) {
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-
-    let json = JSON.stringify(data);
-    let blob = new Blob([json], {type: "octet/stream"});
-    let url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-}
-
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
-  const [part, setPart] = useState({up:[], down:[]});
+  const [partUpInitSubjects, setPartUpInitSubjects] = useState([]);
+  const [partDownInitSubjects, setPartDownInitSubjects] = useState([]);
+
+  const partUpJsonName = 'part_up.json';
+  const PartDownJsonName = 'part_down.json';
 
   useEffect(() => {
-    console.log('componentDidMount');
-
-    apiUtils.promiseFetch('/subjects.json').then((subjects) => {
-      const initSubjects = (subjects.up && subjects.down) ? subjects : {};
+    apiUtils.promiseFetch(partUpJsonName).then((subjects) => {
+      const initSubjects = (subjects) ? subjects : [];
       if(!subjects.error) {
-        setPart(initSubjects)
+        setPartUpInitSubjects(initSubjects)
       } else {
-        setPart({})
+        setPartUpInitSubjects([])
       }
     });
-
+    apiUtils.promiseFetch(PartDownJsonName).then((subjects) => {
+      const initSubjects = (subjects) ? subjects : [];
+      if(!subjects.error) {
+        setPartDownInitSubjects(initSubjects)
+      } else {
+        setPartDownInitSubjects([])
+      }
+    });
   }, []);
 
   function renderHidden() {
@@ -48,14 +42,6 @@ const Editor = (props) => {
         }
       `}</style>
     )
-  }
-
-  function handleChangeDownPartsSubject(subjects){
-    setPart({...part, down:subjects});
-  }
-
-  function handleChangeUpPartsSubject(subjects){
-    setPart({...part, up:subjects});
   }
 
   return (
@@ -70,15 +56,7 @@ const Editor = (props) => {
 
       <QtSection />
 
-      <button onClick={()=>{
-        apiUtils.postData('/subjects.json', part)
-          .then((response) => {
-            console.log('ok')
-          }) // JSON-string from `response.json()` call
-          .catch((error) => {
-            console.error(error)
-          });
-      }}>POST</button>
+
       <br/>
       <br/>
       <div onClick={()=>{
@@ -91,22 +69,20 @@ const Editor = (props) => {
         <Route path="/up" render={() => {
           return <Part
             title={'up'}
-            subjects={part.up}
-            onChangeSubject={handleChangeUpPartsSubject}
+            initSubjects={partUpInitSubjects}
+            jsonName={'part_up.json'}
           />
         }}/>
+
         <Route path="/down" render={() => {
           return <Part
             title={'down'}
-            subjects={part.down}
-            onChangeSubject={handleChangeDownPartsSubject}
+            initSubjects={partDownInitSubjects}
+            jsonName={'part_down.json'}
           />
         }}/>
-      </Switch>
 
-      <button onClick={()=>{
-        downloadJson(part, 'subjects.json');
-      }}>download</button>
+      </Switch>
 
       <br/>
       <br/>
