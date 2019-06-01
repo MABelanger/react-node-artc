@@ -48,7 +48,8 @@ export function handleDownload (fileName, data) {
 }
 
 export function handlePost(jsonName, data) {
-  postData(jsonName, data)
+  const url = '/' + jsonName;
+  postData(url, data)
     .then((response) => {
       console.log('bibi ok')
     }) // JSON-string from `response.json()` call
