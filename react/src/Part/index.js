@@ -7,50 +7,50 @@ import * as apiUtils from '../apiUtils';
 
 const Part = (props) => {
 
-  const [subjects, setSubjects] = useState([]);
+  // const [subjects, props.onSetSubjects] = useState([]);
 
-  useEffect(() => {
-    setSubjects(props.initSubjects)
-  }, [props.initSubjects]);
+  // useEffect(() => {
+  //   props.onSetSubjects(props.initSubjects)
+  // }, [props.initSubjects]);
 
   function handleAddSubject(subject) {
-    setSubjects([...subjects, subject]);
+    props.onSetSubjects([...props.initSubjects, subject]);
   }
 
   function handleDelSubject(index){
-    subjects.splice(index, 1);
-    setSubjects([...subjects]);
+    props.initSubjects.splice(index, 1);
+    props.onSetSubjects([...props.initSubjects]);
   }
 
   function handleAddSubSubject(){
-    setSubjects([...subjects]);
+    props.onSetSubjects([...props.initSubjects]);
   }
 
   function handleAddSubModality(){
-    setSubjects([...subjects]);
+    props.onSetSubjects([...props.initSubjects]);
   }
 
   function handleDelSubSubject() {
     console.log('handleDelSubSubject')
-    setSubjects([...subjects]);
+    props.onSetSubjects([...props.initSubjects]);
   }
 
   function handleDelSubModality() {
     console.log('handleDelSubModality')
-    setSubjects([...subjects]);
+    props.onSetSubjects([...props.initSubjects]);
   }
 
   return (
     <div>
 
       <PostButton
-        data={subjects}
+        data={props.initSubjects}
         title={props.title}
         jsonName={props.jsonName}
       />
 
       <DownloadButton
-        data={subjects}
+        data={props.initSubjects}
         title={props.title}
         jsonName={props.jsonName}
       />
@@ -67,7 +67,7 @@ const Part = (props) => {
           </tr>
         </tbody>
         <SubjectForm onAddSubject={handleAddSubject} />
-        <Subjects  subjects={subjects}
+        <Subjects  subjects={props.initSubjects}
                    onAddSubSubject={handleAddSubSubject}
                    onAddSubModality={handleAddSubModality}
                    onDelSubSubject={handleDelSubSubject}

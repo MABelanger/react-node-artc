@@ -44,6 +44,14 @@ const Editor = (props) => {
     )
   }
 
+  function handleSetPartUpInitSubjects(initSubjects) {
+    setPartUpInitSubjects(initSubjects)
+  }
+
+  function handleSetPartDownInitSubjects(initSubjects) {
+    setPartDownInitSubjects(initSubjects)
+  }
+
   return (
     <div>
 
@@ -70,6 +78,7 @@ const Editor = (props) => {
           return <Part
             title={'up'}
             initSubjects={partUpInitSubjects}
+            onSetSubjects={handleSetPartUpInitSubjects}
             jsonName={'part_up.json'}
           />
         }}/>
@@ -78,6 +87,7 @@ const Editor = (props) => {
           return <Part
             title={'down'}
             initSubjects={partDownInitSubjects}
+            onSetSubjects={handleSetPartDownInitSubjects}
             jsonName={'part_down.json'}
           />
         }}/>
