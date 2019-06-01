@@ -161,6 +161,15 @@ app.get('/part_down.json', function(req, res){
   }
 });
 
+app.get('/part_tmp.json', function(req, res){
+  var isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    resGetJson(res, '/db/part_tmp.json');
+  } else {
+    resGetNeedToLogin(res);
+  }
+});
+
 app.get('/qtSections.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
@@ -189,6 +198,10 @@ app.post('/part_up.json', function(req, res, next) {
 
 app.post('/part_down.json', function(req, res, next) {
   resPostJson(req, res, '/db/part_down.json')
+});
+
+app.post('/part_tmp.json', function(req, res, next) {
+  resPostJson(req, res, '/db/part_tmp.json')
 });
 
 app.get('/user', function(req, res){

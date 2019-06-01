@@ -8,11 +8,13 @@ import * as apiUtils from './apiUtils';
 
 const PART_UP_JSON_NAME = 'part_up.json';
 const PART_DOWN_JSON_NAME = 'part_down.json';
+const PART_TMP_JSON_NAME = 'part_tmp.json';
 
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
   const [partUpSubjects, setPartUpSubjects] = useState([]);
   const [partDownSubjects, setPartDownSubjects] = useState([]);
+  const [partTmpSubjects, setPartTmpSubjects] = useState([]);
 
   useEffect(() => {
     apiUtils.promiseFetch(PART_UP_JSON_NAME).then((subjects) => {
@@ -31,6 +33,14 @@ const Editor = (props) => {
         setPartDownSubjects([]);
       }
     });
+    apiUtils.promiseFetch(PART_TMP_JSON_NAME).then((subjects) => {
+      const initSubjects = (subjects) ? subjects : [];
+      if(!subjects.error) {
+        setPartTmpSubjects(initSubjects);
+      } else {
+        setPartTmpSubjects([]);
+      }
+    });
   }, []);
 
   function renderHidden() {
@@ -43,26 +53,29 @@ const Editor = (props) => {
     )
   }
 
-  function handleSetPartUpInitSubjects(subjects) {
+  function handleSetPartUpSubjects(subjects) {
     setPartUpSubjects(subjects)
   }
 
-  function handleSetPartDownInitSubjects(subjects) {
+  function handleSetPartDownSubjects(subjects) {
     setPartDownSubjects(subjects)
+  }
+
+  function handleSetPartTmpSubjects(subjects) {
+    setPartTmpSubjects(subjects)
   }
 
   return (
     <div>
 
-    <NavTabs
-      pathname={props.location.pathname}
-      history={props.history}
-    />
+      <NavTabs
+        pathname={props.location.pathname}
+        history={props.history}
+      />
 
       { isPrintMode && renderHidden() }
 
       <QtSection />
-
 
       <br/>
       <br/>
@@ -80,7 +93,7 @@ const Editor = (props) => {
               onPost={()=>{ apiUtils.handlePost(PART_UP_JSON_NAME, partUpSubjects)} }
               onDownload={()=>{ apiUtils.handleDownload(PART_UP_JSON_NAME, partUpSubjects)} }
               subjects={partUpSubjects}
-              onSetSubjects={handleSetPartUpInitSubjects}
+              onSetSubjects={handleSetPartUpSubjects}
             />
           </div>
           )
@@ -93,7 +106,20 @@ const Editor = (props) => {
               onPost={()=>{ apiUtils.handlePost(PART_DOWN_JSON_NAME, partDownSubjects)} }
               onDownload={()=>{ apiUtils.handleDownload(PART_DOWN_JSON_NAME, partDownSubjects)} }
               subjects={partDownSubjects}
-              onSetSubjects={handleSetPartDownInitSubjects}
+              onSetSubjects={handleSetPartDownSubjects}
+            />
+          </div>
+          )
+        }}/>
+
+        <Route path="/tmp" render={() => {
+          return (
+          <div>
+            <Part
+              onPost={()=>{ apiUtils.handlePost(PART_TMP_JSON_NAME, partTmpSubjects)} }
+              onDownload={()=>{ apiUtils.handleDownload(PART_TMP_JSON_NAME, partTmpSubjects)} }
+              subjects={partTmpSubjects}
+              onSetSubjects={handleSetPartTmpSubjects}
             />
           </div>
           )
