@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
 import Parts from './Parts';
 import QtSections from './QtSections';
@@ -98,8 +99,26 @@ const Editor = (props) => {
     setPart({...part, up:subjects});
   }
 
+  const upActiveClassName = props.location.pathname == '/up' ? "active" : "";
+  const downActiveClassName = props.location.pathname == '/down' ? "active" : "";
+
   return (
     <div>
+
+
+    <ul className="nav nav-tabs">
+      <li className="nav-item">
+        <a className={"nav-link " + upActiveClassName} onClick={()=>{
+          props.history.push("/up");
+        }}>UP</a>
+      </li>
+      <li className="nav-item">
+      <a className={"nav-link " + downActiveClassName} onClick={()=>{
+        props.history.push("/down");
+      }}>Down</a>
+      </li>
+    </ul>
+
       { isPrintMode && renderHidden() }
 
       <QtSections qtSections={qtSections || []}/>
@@ -120,17 +139,23 @@ const Editor = (props) => {
         setPrintMode(!isPrintMode);
       }}>printMode</div>
 
-      <Parts
-        title={'up'}
-        subjects={part.up}
-        onChangeSubject={handleChangeUpPartsSubject}
-      />
 
-      <Parts
-        title={'down'}
-        subjects={part.down}
-        onChangeSubject={handleChangeDownPartsSubject}
-      />
+      <Switch>
+        <Route path="/up" render={() => {
+          return <Parts
+            title={'up'}
+            subjects={part.up}
+            onChangeSubject={handleChangeUpPartsSubject}
+          />
+        }}/>
+        <Route path="/down" render={() => {
+          return <Parts
+            title={'down'}
+            subjects={part.down}
+            onChangeSubject={handleChangeDownPartsSubject}
+          />
+        }}/>
+      </Switch>
 
       <button onClick={()=>{
         downloadJson(part, 'subjects.json');
@@ -145,4 +170,4 @@ const Editor = (props) => {
   );
 }
 
-export default Editor;
+export default withRouter(Editor);
