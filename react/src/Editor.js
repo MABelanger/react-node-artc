@@ -1,43 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
-import Parts from './Parts';
-import QtSections from './QtSections';
+import Part from './Part';
+import QtSection from './QtSection';
 import NavTabs from './NavTabs';
+import * as apiUtils from './apiUtils';
 
-function promiseFetch(url){
-  return fetch(url,{
-    credentials: 'include'
-  })
-    .then(async (response)=>{
-      try {
-        let jsonResponse = await response.json()
-        return Promise.resolve(jsonResponse)
-
-      } catch(e) {
-        console.log('subjects.json parsing error');
-        return Promise.resolve([]);
-      }
-    })
-}
-
-function postData(url = ``, data = {}) {
-  // Default options are marked with *
-    return fetch(url, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, cors, *same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-            "Content-Type": "application/json",
-        },
-        redirect: "follow", // manual, *follow, error
-        referrer: "no-referrer", // no-referrer, *client
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-        credentials: 'include'
-    })
-    .then(response => response.json()); // parses response to JSON
-}
 
 // https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
 function downloadJson (data, fileName) {
@@ -57,26 +25,16 @@ function downloadJson (data, fileName) {
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
   const [part, setPart] = useState({up:[], down:[]});
-  const [qtSections, setQtSections] = useState([]);
 
   useEffect(() => {
     console.log('componentDidMount');
 
-    promiseFetch('/subjects.json').then((subjects) => {
+    apiUtils.promiseFetch('/subjects.json').then((subjects) => {
       const initSubjects = (subjects.up && subjects.down) ? subjects : {};
       if(!subjects.error) {
         setPart(initSubjects)
       } else {
         setPart({})
-      }
-    });
-
-    promiseFetch('/qtSections.json').then((qtSections) => {
-      const initQtSections = (qtSections.length > 0 ) ? qtSections : [];
-      if(!qtSections.error) {
-        setQtSections(initQtSections)
-      } else {
-        setQtSections([])
       }
     });
 
@@ -108,14 +66,12 @@ const Editor = (props) => {
       history={props.history}
     />
 
-
-
       { isPrintMode && renderHidden() }
 
-      <QtSections qtSections={qtSections || []}/>
+      <QtSection />
 
       <button onClick={()=>{
-        postData('/subjects.json', part)
+        apiUtils.postData('/subjects.json', part)
           .then((response) => {
             console.log('ok')
           }) // JSON-string from `response.json()` call
@@ -133,14 +89,14 @@ const Editor = (props) => {
 
       <Switch>
         <Route path="/up" render={() => {
-          return <Parts
+          return <Part
             title={'up'}
             subjects={part.up}
             onChangeSubject={handleChangeUpPartsSubject}
           />
         }}/>
         <Route path="/down" render={() => {
-          return <Parts
+          return <Part
             title={'down'}
             subjects={part.down}
             onChangeSubject={handleChangeDownPartsSubject}

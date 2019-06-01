@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SubjectForm from '../SubjectForm';
 import Subjects from '../Subjects';
 
-const Parts = (props) => {
+const Part = (props) => {
   function handleAddSubject(subject) {
     props.onChangeSubject([...props.subjects, subject]);
   }
@@ -57,4 +57,4 @@ const Parts = (props) => {
   );
 }
 
-export default Parts;
+export default Part;
