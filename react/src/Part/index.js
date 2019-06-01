@@ -7,12 +7,6 @@ import * as apiUtils from '../apiUtils';
 
 const Part = (props) => {
 
-  // const [subjects, props.onSetSubjects] = useState([]);
-
-  // useEffect(() => {
-  //   props.onSetSubjects(props.initSubjects)
-  // }, [props.initSubjects]);
-
   function handleAddSubject(subject) {
     props.onSetSubjects([...props.initSubjects, subject]);
   }
