@@ -44,12 +44,12 @@ const Editor = (props) => {
     )
   }
 
-  function handleSetPartUpInitSubjects(initSubjects) {
-    setPartUpInitSubjects(initSubjects)
+  function handleSetPartUpInitSubjects(subjects) {
+    setPartUpInitSubjects(subjects)
   }
 
-  function handleSetPartDownInitSubjects(initSubjects) {
-    setPartDownInitSubjects(initSubjects)
+  function handleSetPartDownInitSubjects(subjects) {
+    setPartDownInitSubjects(subjects)
   }
 
   return (
@@ -77,7 +77,7 @@ const Editor = (props) => {
         <Route path="/up" render={() => {
           return <Part
             title={'up'}
-            initSubjects={partUpInitSubjects}
+            subjects={partUpInitSubjects}
             onSetSubjects={handleSetPartUpInitSubjects}
             jsonName={'part_up.json'}
           />
@@ -86,7 +86,7 @@ const Editor = (props) => {
         <Route path="/down" render={() => {
           return <Part
             title={'down'}
-            initSubjects={partDownInitSubjects}
+            subjects={partDownInitSubjects}
             onSetSubjects={handleSetPartDownInitSubjects}
             jsonName={'part_down.json'}
           />

@@ -8,43 +8,43 @@ import * as apiUtils from '../apiUtils';
 const Part = (props) => {
 
   function handleAddSubject(subject) {
-    props.onSetSubjects([...props.initSubjects, subject]);
+    props.onSetSubjects([...props.subjects, subject]);
   }
 
   function handleDelSubject(index){
-    props.initSubjects.splice(index, 1);
-    props.onSetSubjects([...props.initSubjects]);
+    props.subjects.splice(index, 1);
+    props.onSetSubjects([...props.subjects]);
   }
 
   function handleAddSubSubject(){
-    props.onSetSubjects([...props.initSubjects]);
+    props.onSetSubjects([...props.subjects]);
   }
 
   function handleAddSubModality(){
-    props.onSetSubjects([...props.initSubjects]);
+    props.onSetSubjects([...props.subjects]);
   }
 
   function handleDelSubSubject() {
     console.log('handleDelSubSubject')
-    props.onSetSubjects([...props.initSubjects]);
+    props.onSetSubjects([...props.subjects]);
   }
 
   function handleDelSubModality() {
     console.log('handleDelSubModality')
-    props.onSetSubjects([...props.initSubjects]);
+    props.onSetSubjects([...props.subjects]);
   }
 
   return (
     <div>
 
       <PostButton
-        data={props.initSubjects}
+        data={props.subjects}
         title={props.title}
         jsonName={props.jsonName}
       />
 
       <DownloadButton
-        data={props.initSubjects}
+        data={props.subjects}
         title={props.title}
         jsonName={props.jsonName}
       />
@@ -61,7 +61,7 @@ const Part = (props) => {
           </tr>
         </tbody>
         <SubjectForm onAddSubject={handleAddSubject} />
-        <Subjects  subjects={props.initSubjects}
+        <Subjects  subjects={props.subjects}
                    onAddSubSubject={handleAddSubSubject}
                    onAddSubModality={handleAddSubModality}
                    onDelSubSubject={handleDelSubSubject}
