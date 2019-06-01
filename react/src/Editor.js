@@ -100,10 +100,6 @@ const Editor = (props) => {
     setPart({...part, up:subjects});
   }
 
-
-
-
-
   return (
     <div>
 
