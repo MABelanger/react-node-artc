@@ -25,30 +25,22 @@ const Part = (props) => {
   }
 
   function handleDelSubSubject() {
-    console.log('handleDelSubSubject')
     props.onSetSubjects([...props.subjects]);
   }
 
   function handleDelSubModality() {
-    console.log('handleDelSubModality')
     props.onSetSubjects([...props.subjects]);
   }
 
   return (
     <div>
-
       <PostButton
-        data={props.subjects}
-        title={props.title}
-        jsonName={props.jsonName}
+        onPost={props.onPost}
       />
 
       <DownloadButton
-        data={props.subjects}
-        title={props.title}
-        jsonName={props.jsonName}
+        onDownload={props.onDownload}
       />
-
       <h1>{props.title}</h1>
       <table>
         <tbody>

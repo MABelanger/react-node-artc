@@ -31,3 +31,28 @@ export function postData(url = ``, data = []) {
     })
     .then(response => response.json()); // parses response to JSON
 }
+
+// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
+export function handleDownload (fileName, data) {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+
+    let json = JSON.stringify(data);
+    let blob = new Blob([json], {type: "octet/stream"});
+    let url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+export function handlePost(jsonName, data) {
+  postData(jsonName, data)
+    .then((response) => {
+      console.log('bibi ok')
+    }) // JSON-string from `response.json()` call
+    .catch((error) => {
+      console.error(error)
+    });
+}

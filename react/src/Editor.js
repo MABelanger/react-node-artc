@@ -9,27 +9,24 @@ import * as apiUtils from './apiUtils';
 
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
-  const [partUpInitSubjects, setPartUpInitSubjects] = useState([]);
-  const [partDownInitSubjects, setPartDownInitSubjects] = useState([]);
-
-  const partUpJsonName = 'part_up.json';
-  const PartDownJsonName = 'part_down.json';
+  const [partUpSubjects, setPartUpSubjects] = useState([]);
+  const [partDownSubjects, setPartDownSubjects] = useState([]);
 
   useEffect(() => {
-    apiUtils.promiseFetch(partUpJsonName).then((subjects) => {
+    apiUtils.promiseFetch('part_up.json').then((subjects) => {
       const initSubjects = (subjects) ? subjects : [];
       if(!subjects.error) {
-        setPartUpInitSubjects(initSubjects)
+        setPartUpSubjects(initSubjects);
       } else {
-        setPartUpInitSubjects([])
+        setPartUpSubjects([]);
       }
     });
-    apiUtils.promiseFetch(PartDownJsonName).then((subjects) => {
+    apiUtils.promiseFetch('part_down.json').then((subjects) => {
       const initSubjects = (subjects) ? subjects : [];
       if(!subjects.error) {
-        setPartDownInitSubjects(initSubjects)
+        setPartDownSubjects(initSubjects);
       } else {
-        setPartDownInitSubjects([])
+        setPartDownSubjects([]);
       }
     });
   }, []);
@@ -45,11 +42,11 @@ const Editor = (props) => {
   }
 
   function handleSetPartUpInitSubjects(subjects) {
-    setPartUpInitSubjects(subjects)
+    setPartUpSubjects(subjects)
   }
 
   function handleSetPartDownInitSubjects(subjects) {
-    setPartDownInitSubjects(subjects)
+    setPartDownSubjects(subjects)
   }
 
   return (
@@ -75,21 +72,29 @@ const Editor = (props) => {
 
       <Switch>
         <Route path="/up" render={() => {
-          return <Part
-            title={'up'}
-            subjects={partUpInitSubjects}
-            onSetSubjects={handleSetPartUpInitSubjects}
-            jsonName={'part_up.json'}
-          />
+          return (
+          <div>
+            <Part
+              onPost={()=>{apiUtils.handlePost('part_up.json', partUpSubjects)}}
+              onDownload={()=>{apiUtils.handleDownload('part_up.json', partUpSubjects)}}
+              subjects={partUpSubjects}
+              onSetSubjects={handleSetPartUpInitSubjects}
+            />
+          </div>
+          )
         }}/>
 
         <Route path="/down" render={() => {
-          return <Part
-            title={'down'}
-            subjects={partDownInitSubjects}
-            onSetSubjects={handleSetPartDownInitSubjects}
-            jsonName={'part_down.json'}
-          />
+          return (
+          <div>
+            <Part
+              onPost={()=>{apiUtils.handlePost('part_down.json', partDownSubjects)}}
+              onDownload={()=>{apiUtils.handleDownload('part_down.json', partDownSubjects)}}
+              subjects={partDownSubjects}
+              onSetSubjects={handleSetPartDownInitSubjects}
+            />
+          </div>
+          )
         }}/>
 
       </Switch>
