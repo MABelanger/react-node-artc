@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
 import Parts from './Parts';
 import QtSections from './QtSections';
+import NavTabs from './NavTabs';
 
 function promiseFetch(url){
   return fetch(url,{
@@ -99,25 +100,19 @@ const Editor = (props) => {
     setPart({...part, up:subjects});
   }
 
-  const upActiveClassName = props.location.pathname == '/up' ? "active" : "";
-  const downActiveClassName = props.location.pathname == '/down' ? "active" : "";
+
+
+
 
   return (
     <div>
 
+    <NavTabs
+      pathname={props.location.pathname}
+      history={props.history}
+    />
 
-    <ul className="nav nav-tabs">
-      <li className="nav-item">
-        <a className={"nav-link " + upActiveClassName} onClick={()=>{
-          props.history.push("/up");
-        }}>UP</a>
-      </li>
-      <li className="nav-item">
-      <a className={"nav-link " + downActiveClassName} onClick={()=>{
-        props.history.push("/down");
-      }}>Down</a>
-      </li>
-    </ul>
+
 
       { isPrintMode && renderHidden() }
 
