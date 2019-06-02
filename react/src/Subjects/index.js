@@ -88,6 +88,9 @@ function Subject({ subject, onAddSubSubject, onAddSubModality, onDelSubSubject, 
         <td className={style['td-width']}>
           { renderHeader(subject.futurPaste) }
         </td>
+        <td className={style['td-width']}>
+          { renderHeader(subject.flip) }
+        </td>
         <td>
           <button onClick={()=>{onDelSubject(indexSubject)}}>X</button>
         </td>

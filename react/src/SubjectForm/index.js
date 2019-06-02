@@ -7,6 +7,7 @@ const Subject = (props) => {
   const [dontWantHeader, setDontWantHeader] = useState('');
   const [whoAmIHeader, setWhoAmIHeader] = useState('');
   const [futurPasteHeader, setFuturPasteHeader] = useState('');
+  const [flipHeader, setFlipHeader] = useState('');
 
   function handleChangeDoWant(e) {
     const value = e.target.value;
@@ -28,11 +29,17 @@ const Subject = (props) => {
     setFuturPasteHeader(value);
   }
 
+  function handleChangeFlip(e) {
+    const value = e.target.value;
+    setFlipHeader(value);
+  }
+
   function clearForm() {
     setDoWantHeader('');
     setDontWantHeader('');
     setWhoAmIHeader('');
     setFuturPasteHeader('');
+    setFlipHeader('');
   }
 
     return (
@@ -67,12 +74,20 @@ const Subject = (props) => {
               </input>
             </th>
             <th className={style['form-th']}>
+              <input className={style['form-input']}
+                     onChange={handleChangeFlip}
+                     value={flipHeader}
+              >
+              </input>
+            </th>
+            <th className={style['form-th']}>
               <button onClick={()=>{
                 const subject = {
                   doWant: {header: doWantHeader},
                   dontWant: {header: dontWantHeader},
                   whoAmI: {header: whoAmIHeader},
-                  futurPaste: {header: futurPasteHeader}
+                  futurPaste: {header: futurPasteHeader},
+                  flip: {header: flipHeader}
                 };
                 props.onAddSubject(subject);
                 clearForm();

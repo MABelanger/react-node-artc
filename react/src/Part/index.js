@@ -49,6 +49,7 @@ const Part = (props) => {
             <th>Do want</th>
             <th>Who am i</th>
             <th>In 1, 2 5 years</th>
+            <th>Flip</th>
             <th>Add</th>
           </tr>
         </tbody>
