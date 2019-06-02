@@ -93,7 +93,7 @@ const Editor = (props) => {
 
   function renderSuccess(message) {
     return(
-      <div className="alert alert-success" role="alert">
+      <div className="alert alert-success" role="alert" style={{float:'right'}}>
         {message}
       </div>
     )
@@ -101,7 +101,7 @@ const Editor = (props) => {
 
   function renderError(message) {
     return(
-      <div className="alert alert-danger" role="alert">
+      <div className="alert alert-danger" role="alert" style={{float:'right'}}>
         {message}
       </div>
     )
