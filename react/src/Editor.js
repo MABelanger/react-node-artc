@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
 import Part from './Part';
+import Notes from './Notes';
 import QtSection from './QtSection';
 import NavTabs from './NavTabs';
 import * as apiUtils from './apiUtils';
@@ -9,12 +10,14 @@ import * as apiUtils from './apiUtils';
 const PART_UP_JSON_NAME = 'part_up.json';
 const PART_DOWN_JSON_NAME = 'part_down.json';
 const PART_TMP_JSON_NAME = 'part_tmp.json';
+const NOTE_JSON_NAME = 'notes.json';
 
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
   const [partUpSubjects, setPartUpSubjects] = useState([]);
   const [partDownSubjects, setPartDownSubjects] = useState([]);
   const [partTmpSubjects, setPartTmpSubjects] = useState([]);
+  const [notes, setNotes] = useState([]);
   const [isSuccessPost, setSuccessPost] = useState(false);
   const [isErrorPost, setErrorPost] = useState(false);
 
@@ -43,6 +46,14 @@ const Editor = (props) => {
         setPartTmpSubjects([]);
       }
     });
+    apiUtils.promiseFetch(NOTE_JSON_NAME).then((notes) => {
+      const initNotes = (notes) ? notes : [];
+      if(!notes.error) {
+        setNotes(initNotes);
+      } else {
+        setNotes([]);
+      }
+    });
   }, []);
 
   function renderHidden() {
@@ -65,6 +76,10 @@ const Editor = (props) => {
 
   function handleSetPartTmpSubjects(subjects) {
     setPartTmpSubjects(subjects)
+  }
+
+  function handleSetNotes(notes) {
+    setNotes(notes)
   }
 
   function notifySuccessPost() {
@@ -177,6 +192,23 @@ const Editor = (props) => {
               }}
               subjects={partTmpSubjects}
               onSetSubjects={handleSetPartTmpSubjects}
+            />
+          </div>
+          )
+        }}/>
+
+        <Route path="/notes" render={() => {
+          return (
+          <div>
+            <Notes
+              onPost={()=>{
+                handlePost(NOTE_JSON_NAME, notes);
+              }}
+              onDownload={()=>{
+                apiUtils.handleDownload(NOTE_JSON_NAME, notes);
+              }}
+              notes={notes}
+              onSetNotes={handleSetNotes}
             />
           </div>
           )

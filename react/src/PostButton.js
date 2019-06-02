@@ -1,5 +1,4 @@
 import React from 'react';
-import * as apiUtils from '../apiUtils';
 
 const PostButton = ({onPost}) => {
 

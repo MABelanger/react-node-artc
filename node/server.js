@@ -146,6 +146,15 @@ app.get('/part_tmp.json', function(req, res){
   }
 });
 
+app.get('/notes.json', function(req, res){
+  let isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    handleGetJson(res, '/db/notes.json');
+  } else {
+    handleGetNeedToLogin(res);
+  }
+});
+
 app.get('/qtSections.json', function(req, res){
   let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
@@ -190,6 +199,15 @@ app.post('/part_tmp.json', function(req, res, next) {
   let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handlePostJson(req, res, '/db/part_tmp.json');
+  } else {
+    handleGetNeedToLogin(res);
+  }
+});
+
+app.post('/notes.json', function(req, res, next) {
+  let isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    handlePostJson(req, res, '/db/notes.json');
   } else {
     handleGetNeedToLogin(res);
   }
