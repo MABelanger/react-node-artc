@@ -40,15 +40,15 @@ const Subject = (props) => {
           <tr>
             <th className={style['form-th']}>
               <input className={style['form-input']}
-                     onChange={handleChangeDoWant}
-                     value={doWantHeader}
+                     onChange={handleChangeDontWant}
+                     value={dontWantHeader}
               >
               </input>
             </th>
             <th className={style['form-th']}>
               <input className={style['form-input']}
-                     onChange={handleChangeDontWant}
-                     value={dontWantHeader}
+                     onChange={handleChangeDoWant}
+                     value={doWantHeader}
               >
               </input>
             </th>
