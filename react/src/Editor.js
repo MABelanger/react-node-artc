@@ -15,6 +15,8 @@ const Editor = (props) => {
   const [partUpSubjects, setPartUpSubjects] = useState([]);
   const [partDownSubjects, setPartDownSubjects] = useState([]);
   const [partTmpSubjects, setPartTmpSubjects] = useState([]);
+  const [isSuccessPost, setSuccessPost] = useState(false);
+  const [isErrorPost, setErrorPost] = useState(false);
 
   useEffect(() => {
     apiUtils.promiseFetch(PART_UP_JSON_NAME).then((subjects) => {
@@ -65,8 +67,51 @@ const Editor = (props) => {
     setPartTmpSubjects(subjects)
   }
 
+  function notifySuccessPost() {
+    setSuccessPost(true)
+    setTimeout(()=>{
+      setSuccessPost(false)
+    },1000);
+  }
+
+  function notifyErrorPost() {
+    setErrorPost(true)
+    setTimeout(()=>{
+      setErrorPost(false)
+    },1000);
+  }
+
+  function handlePost(jsonName, partSubjects){
+    apiUtils.handlePost(jsonName, partSubjects)
+      .then((response) => {
+        notifySuccessPost();
+      }) // JSON-string from `response.json()` call
+      .catch((error) => {
+        notifyErrorPost();
+      });
+  }
+
+  function renderSuccess(message) {
+    return(
+      <div className="alert alert-success" role="alert">
+        {message}
+      </div>
+    )
+  }
+
+  function renderError(message) {
+    return(
+      <div className="alert alert-danger" role="alert">
+        {message}
+      </div>
+    )
+  }
+
   return (
     <div>
+
+      {isSuccessPost && renderSuccess('saved!')}
+      {isErrorPost && renderError('Not saved!')}
 
       <NavTabs
         pathname={props.location.pathname}
@@ -90,8 +135,12 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{ apiUtils.handlePost(PART_UP_JSON_NAME, partUpSubjects)} }
-              onDownload={()=>{ apiUtils.handleDownload(PART_UP_JSON_NAME, partUpSubjects)} }
+              onPost={()=>{
+                handlePost(PART_UP_JSON_NAME, partUpSubjects);
+              }}
+              onDownload={()=>{
+                apiUtils.handleDownload(PART_UP_JSON_NAME, partUpSubjects)
+              }}
               subjects={partUpSubjects}
               onSetSubjects={handleSetPartUpSubjects}
             />
@@ -103,8 +152,12 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{ apiUtils.handlePost(PART_DOWN_JSON_NAME, partDownSubjects)} }
-              onDownload={()=>{ apiUtils.handleDownload(PART_DOWN_JSON_NAME, partDownSubjects)} }
+              onPost={()=>{
+                handlePost(PART_DOWN_JSON_NAME, partDownSubjects);
+              }}
+              onDownload={()=>{
+                apiUtils.handleDownload(PART_DOWN_JSON_NAME, partDownSubjects)
+              }}
               subjects={partDownSubjects}
               onSetSubjects={handleSetPartDownSubjects}
             />
@@ -116,8 +169,12 @@ const Editor = (props) => {
           return (
           <div>
             <Part
-              onPost={()=>{ apiUtils.handlePost(PART_TMP_JSON_NAME, partTmpSubjects)} }
-              onDownload={()=>{ apiUtils.handleDownload(PART_TMP_JSON_NAME, partTmpSubjects)} }
+              onPost={()=>{
+                handlePost(PART_TMP_JSON_NAME, partTmpSubjects);
+              }}
+              onDownload={()=>{
+                apiUtils.handleDownload(PART_TMP_JSON_NAME, partTmpSubjects)
+              }}
               subjects={partTmpSubjects}
               onSetSubjects={handleSetPartTmpSubjects}
             />

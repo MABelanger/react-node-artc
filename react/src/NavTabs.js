@@ -6,19 +6,25 @@ function NavTabs({pathname, history}) {
   return (
     <ul className="nav nav-tabs">
       <li className="nav-item">
-        <a className={"nav-link " + upActiveClassName} onClick={()=>{
-          history.push("/up");
-        }}>UP</a>
+        <a className={"nav-link " + upActiveClassName}
+            onClick={()=>{
+              history.push("/up");
+            }}
+        >UP</a>
       </li>
       <li className="nav-item">
-        <a className={"nav-link " + downActiveClassName} onClick={()=>{
-          history.push("/down");
-        }}>Down</a>
+        <a className={"nav-link " + downActiveClassName}
+            onClick={()=>{
+              history.push("/down");
+            }}
+        >Down</a>
       </li>
       <li className="nav-item">
-        <a className={"nav-link " + tmpActiveClassName} onClick={()=>{
-          history.push("/tmp");
-        }}>Tmp</a>
+        <a className={"nav-link " + tmpActiveClassName}
+            onClick={()=>{
+              history.push("/tmp");
+            }}
+        >Tmp</a>
       </li>
     </ul>
   );
