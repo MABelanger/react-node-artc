@@ -1,15 +1,15 @@
-var express = require("express");
-var app = express();
-var server = require("http").createServer(app);
-var path = require('path');
-var fs = require('fs');
-var passport = require('passport');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var LocalStrategy = require('passport-local').Strategy
-var FileStore = require('session-file-store')(session);
-var utils = require('./utils');
-var dotenv = require('dotenv');
+const express = require("express");
+const app = express();
+const server = require("http").createServer(app);
+const path = require('path');
+const fs = require('fs');
+const passport = require('passport');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const LocalStrategy = require('passport-local').Strategy
+const FileStore = require('session-file-store')(session);
+const utils = require('./utils');
+const dotenv = require('dotenv');
 
 
 // read .env file and add it to process.env
@@ -24,12 +24,12 @@ if(process.env.USERS){
 }
 
 function handleGetJson(res, dbJson) {
-  var usersFilePath = path.join(__dirname, dbJson);
+  let usersFilePath = path.join(__dirname, dbJson);
   fs.access(usersFilePath, fs.constants.F_OK, (err) => {
     if(err) {
       res.json([]);
     } else {
-      var readable = fs.createReadStream(usersFilePath);
+      let readable = fs.createReadStream(usersFilePath);
       readable.pipe(res);
     }
   });
@@ -40,7 +40,7 @@ function handleGetUserJson(res, user) {
 }
 
 function handleGetNeedToLogin(res) {
-  var error = {
+  let error = {
     error : 'need to login!'
   }
   return res.status(401).json(error);
@@ -51,13 +51,13 @@ app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Headers to enable Cross-origin resource sharing (CORS)
-var middlewareCors = require('./middlewares/cors');
-var middlewareUserAgent = require('./middlewares/userAgent');
+let middlewareCors = require('./middlewares/cors');
+let middlewareUserAgent = require('./middlewares/userAgent');
 
 app.use(middlewareCors);
 app.use(middlewareUserAgent);
 
-var configSession = {
+let configSession = {
   store: new FileStore(),
   secret: process.env.SESSION_SECRET,
   proxy: true,
@@ -79,8 +79,8 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  var validUserId = null;
-  for(var i=0; i<USERS.length; i++) {
+  let validUserId = null;
+  for(let i=0; i<USERS.length; i++) {
     if(id == USERS[i].id) {
       done(null, USERS[i]);
     }
@@ -89,7 +89,7 @@ passport.deserializeUser(function(id, done) {
 
 passport.use('local', new LocalStrategy(
   function (username, password, done) {
-    for(var i=0; i<USERS.length; i++) {
+    for(let i=0; i<USERS.length; i++) {
       if (username === USERS[i].username && password === USERS[i].password) {
         return done(null, USERS[i]);
       }
@@ -104,7 +104,7 @@ app.post('/login', function(req, res, next) {
       return res.status(500).json(error);
     }
     if(!user) {
-      var error = {
+      let error = {
         error : 'wrong user or password'
       }
       return res.status(401).json(error);
@@ -120,7 +120,7 @@ app.use(express.static("public"));
 
 // private get & post
 app.get('/part_up.json', function(req, res){
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handleGetJson(res, '/db/part_up.json');
   } else {
@@ -129,7 +129,7 @@ app.get('/part_up.json', function(req, res){
 });
 
 app.get('/part_down.json', function(req, res){
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handleGetJson(res, '/db/part_down.json');
   } else {
@@ -138,7 +138,7 @@ app.get('/part_down.json', function(req, res){
 });
 
 app.get('/part_tmp.json', function(req, res){
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handleGetJson(res, '/db/part_tmp.json');
   } else {
@@ -147,7 +147,7 @@ app.get('/part_tmp.json', function(req, res){
 });
 
 app.get('/qtSections.json', function(req, res){
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handleGetJson(res, '/db/qtSections.json');
   } else {
@@ -169,7 +169,7 @@ function handlePostJson(req, res, dbJson) {
 }
 
 app.post('/part_up.json', function(req, res, next) {
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handlePostJson(req, res, '/db/part_up.json');
   } else {
@@ -178,7 +178,7 @@ app.post('/part_up.json', function(req, res, next) {
 });
 
 app.post('/part_down.json', function(req, res, next) {
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handlePostJson(req, res, '/db/part_down.json');
   } else {
@@ -187,7 +187,7 @@ app.post('/part_down.json', function(req, res, next) {
 });
 
 app.post('/part_tmp.json', function(req, res, next) {
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     handlePostJson(req, res, '/db/part_tmp.json');
   } else {
@@ -196,7 +196,7 @@ app.post('/part_tmp.json', function(req, res, next) {
 });
 
 app.get('/user', function(req, res){
-  var isAuthenticated = req.isAuthenticated();
+  let isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
     let user = req.user;
     console.log('user', user);
