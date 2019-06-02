@@ -23,7 +23,7 @@ if(process.env.USERS){
   USERS = JSON.parse(process.env.USERS);
 }
 
-function resGetJson(res, dbJson) {
+function handleGetJson(res, dbJson) {
   var usersFilePath = path.join(__dirname, dbJson);
   fs.access(usersFilePath, fs.constants.F_OK, (err) => {
     if(err) {
@@ -35,11 +35,11 @@ function resGetJson(res, dbJson) {
   });
 }
 
-function sendUserJson(res, user) {
+function handleGetUserJson(res, user) {
   return res.status(200).json(user);
 }
 
-function resGetNeedToLogin(res) {
+function handleGetNeedToLogin(res) {
   var error = {
     error : 'need to login!'
   }
@@ -117,70 +117,46 @@ app.post('/login', function(req, res, next) {
 
 app.use(express.static("public"));
 
-function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()){
-      return next();
-    }
-    else {
-      res.redirect('/');
-    }
-}
 
-function logMedia(req, res, next) {
-
-  let log = {
-    date: new Date(new Date().getTime() - 1000*60*60*4),
-    username: req.user.username,
-    url: req.url,
-    userAgent: res.locals.ua
-  };
-
-  console.log('log', JSON.stringify(log));
-
-  return next();
-
-}
-
-
-// private subjects.json
+// private get & post
 app.get('/part_up.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
-    resGetJson(res, '/db/part_up.json');
+    handleGetJson(res, '/db/part_up.json');
   } else {
-    resGetNeedToLogin(res);
+    handleGetNeedToLogin(res);
   }
 });
 
 app.get('/part_down.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
-    resGetJson(res, '/db/part_down.json');
+    handleGetJson(res, '/db/part_down.json');
   } else {
-    resGetNeedToLogin(res);
+    handleGetNeedToLogin(res);
   }
 });
 
 app.get('/part_tmp.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
-    resGetJson(res, '/db/part_tmp.json');
+    handleGetJson(res, '/db/part_tmp.json');
   } else {
-    resGetNeedToLogin(res);
+    handleGetNeedToLogin(res);
   }
 });
 
 app.get('/qtSections.json', function(req, res){
   var isAuthenticated = req.isAuthenticated();
   if(isAuthenticated) {
-    resGetJson(res, '/db/qtSections.json');
+    handleGetJson(res, '/db/qtSections.json');
   } else {
-    resGetNeedToLogin(res);
+    handleGetNeedToLogin(res);
   }
 });
 
 
-function resPostJson(req, res, dbJson) {
+function handlePostJson(req, res, dbJson) {
   let partDir = path.join(__dirname, dbJson);
   const data = req.body;
   fs.writeFile(partDir, JSON.stringify(data), function (err) {
@@ -193,15 +169,30 @@ function resPostJson(req, res, dbJson) {
 }
 
 app.post('/part_up.json', function(req, res, next) {
-  resPostJson(req, res, '/db/part_up.json')
+  var isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    handlePostJson(req, res, '/db/part_up.json');
+  } else {
+    handleGetNeedToLogin(res);
+  }
 });
 
 app.post('/part_down.json', function(req, res, next) {
-  resPostJson(req, res, '/db/part_down.json')
+  var isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    handlePostJson(req, res, '/db/part_down.json');
+  } else {
+    handleGetNeedToLogin(res);
+  }
 });
 
 app.post('/part_tmp.json', function(req, res, next) {
-  resPostJson(req, res, '/db/part_tmp.json')
+  var isAuthenticated = req.isAuthenticated();
+  if(isAuthenticated) {
+    handlePostJson(req, res, '/db/part_tmp.json');
+  } else {
+    handleGetNeedToLogin(res);
+  }
 });
 
 app.get('/user', function(req, res){
@@ -210,9 +201,9 @@ app.get('/user', function(req, res){
     let user = req.user;
     console.log('user', user);
     console.log('res.locals.ua', res.locals.ua);
-    sendUserJson(res, user);
+    handleGetUserJson(res, user);
   } else {
-    resGetNeedToLogin(res);
+    handleGetNeedToLogin(res);
   }
 });
 
