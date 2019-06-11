@@ -44,15 +44,15 @@ const BodyNotes = (props) => {
     />
     <h1>{props.title}</h1>
     <table>
+      <NoteForm onAddNote={(note)=>{
+        props.onSetNotes([...props.notes, note])
+      }} />
       <Notes notes={props.notes}
              onDelNote={(index)=>{
                props.notes.splice(index, 1);
                props.onSetNotes([...props.notes])
              }}
       />
-      <NoteForm onAddNote={(note)=>{
-        props.onSetNotes([...props.notes, note])
-      }} />
     </table>
     </div>
   )
