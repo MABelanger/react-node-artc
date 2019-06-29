@@ -22,9 +22,8 @@ const Notes = ({ notes, onDelNote }) => {
   return notes.slice(0).reverse().map((note, indexMap) => {
     let index = notes.length - indexMap - 1;
     return (
-      <tbody>
-        <Note key={index}
-              index={index}
+      <tbody key={index}>
+        <Note index={index}
               note={note}
               onDelNote={onDelNote}
         />
@@ -33,28 +32,35 @@ const Notes = ({ notes, onDelNote }) => {
   })
 }
 
+
+
 const BodyNotes = (props) => {
+
+  function handleAddNote(note) {
+    props.onSetNotes([...props.notes, note])
+  }
+
+  function handleDelNote(index) {
+    props.notes.splice(index, 1);
+    props.onSetNotes([...props.notes])
+  }
+
   return (
-    <div>
-    <PostButton
-      onPost={props.onPost}
-    />
-    <DownloadButton
-      onDownload={props.onDownload}
-    />
-    <h1>{props.title}</h1>
-    <table>
-      <NoteForm onAddNote={(note)=>{
-        props.onSetNotes([...props.notes, note])
-      }} />
-      <Notes notes={props.notes}
-             onDelNote={(index)=>{
-               props.notes.splice(index, 1);
-               props.onSetNotes([...props.notes])
-             }}
+    <>
+      <PostButton
+        onPost={props.onPost}
       />
-    </table>
-    </div>
+      <DownloadButton
+        onDownload={props.onDownload}
+      />
+      <h1>{props.title}</h1>
+      <table>
+        <NoteForm onAddNote={handleAddNote}/>
+        <Notes notes={props.notes}
+               onDelNote={handleDelNote}
+        />
+      </table>
+    </>
   )
 }
 export default BodyNotes;

@@ -3,7 +3,6 @@ import PostButton from '../PostButton';
 import DownloadButton from '../DownloadButton';
 import SubjectForm from '../SubjectForm';
 import Subjects from '../Subjects';
-import * as apiUtils from '../apiUtils';
 
 const Part = (props) => {
 
