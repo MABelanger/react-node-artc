@@ -1,60 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
-import Part from './Part';
-import Notes from './Notes';
-import QtSection from './QtSection';
-import NavTabs from './NavTabs';
-import * as apiUtils from './apiUtils';
+import { useStatusPost } from './hooks/statusPost';
 
-const PART_UP_JSON_NAME = 'part_up.json';
-const PART_DOWN_JSON_NAME = 'part_down.json';
-const PART_TMP_JSON_NAME = 'part_tmp.json';
-const NOTE_JSON_NAME = 'notes.json';
+
+import QtSections from './QtSections';
+import NavTabs from './NavTabs';
+import SwitchParts from './SwitchParts';
 
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
-  const [partUpSubjects, setPartUpSubjects] = useState([]);
-  const [partDownSubjects, setPartDownSubjects] = useState([]);
-  const [partTmpSubjects, setPartTmpSubjects] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [isSuccessPost, setSuccessPost] = useState(false);
-  const [isErrorPost, setErrorPost] = useState(false);
+
+  const [isSuccessPost, isErrorPost, notifySuccessPost, notifyErrorPost] = useStatusPost([]);
+
 
   useEffect(() => {
-    apiUtils.promiseFetch(PART_UP_JSON_NAME).then((subjects) => {
-      const initSubjects = (subjects) ? subjects : [];
-      if(!subjects.error) {
-        setPartUpSubjects(initSubjects);
-      } else {
-        setPartUpSubjects([]);
-      }
-    });
-    apiUtils.promiseFetch(PART_DOWN_JSON_NAME).then((subjects) => {
-      const initSubjects = (subjects) ? subjects : [];
-      if(!subjects.error) {
-        setPartDownSubjects(initSubjects);
-      } else {
-        setPartDownSubjects([]);
-      }
-    });
-    apiUtils.promiseFetch(PART_TMP_JSON_NAME).then((subjects) => {
-      const initSubjects = (subjects) ? subjects : [];
-      if(!subjects.error) {
-        setPartTmpSubjects(initSubjects);
-      } else {
-        setPartTmpSubjects([]);
-      }
-    });
-    apiUtils.promiseFetch(NOTE_JSON_NAME).then((notes) => {
-      const initNotes = (notes) ? notes : [];
-      if(!notes.error) {
-        setNotes(initNotes);
-      } else {
-        setNotes([]);
-      }
-    });
-  }, []);
+  }, [isSuccessPost, isErrorPost]);
 
   function renderHidden() {
     return(
@@ -64,46 +25,6 @@ const Editor = (props) => {
         }
       `}</style>
     )
-  }
-
-  function handleSetPartUpSubjects(subjects) {
-    setPartUpSubjects(subjects)
-  }
-
-  function handleSetPartDownSubjects(subjects) {
-    setPartDownSubjects(subjects)
-  }
-
-  function handleSetPartTmpSubjects(subjects) {
-    setPartTmpSubjects(subjects)
-  }
-
-  function handleSetNotes(notes) {
-    setNotes(notes)
-  }
-
-  function notifySuccessPost() {
-    setSuccessPost(true)
-    setTimeout(()=>{
-      setSuccessPost(false)
-    },1000);
-  }
-
-  function notifyErrorPost() {
-    setErrorPost(true)
-    setTimeout(()=>{
-      setErrorPost(false)
-    },1000);
-  }
-
-  function handlePost(jsonName, partSubjects){
-    apiUtils.handlePost(jsonName, partSubjects)
-      .then((response) => {
-        notifySuccessPost();
-      }) // JSON-string from `response.json()` call
-      .catch((error) => {
-        notifyErrorPost();
-      });
   }
 
   function renderSuccess(message) {
@@ -135,7 +56,7 @@ const Editor = (props) => {
 
       { isPrintMode && renderHidden() }
 
-      <QtSection />
+      <QtSections />
 
       <br/>
       <br/>
@@ -145,76 +66,8 @@ const Editor = (props) => {
       }}>printMode</div>
 
 
-      <Switch>
-        <Route path="/up" render={() => {
-          return (
-          <div>
-            <Part
-              onPost={()=>{
-                handlePost(PART_UP_JSON_NAME, partUpSubjects);
-              }}
-              onDownload={()=>{
-                apiUtils.handleDownload(PART_UP_JSON_NAME, partUpSubjects)
-              }}
-              subjects={partUpSubjects}
-              onSetSubjects={handleSetPartUpSubjects}
-            />
-          </div>
-          )
-        }}/>
+      <SwitchParts />
 
-        <Route path="/down" render={() => {
-          return (
-          <div>
-            <Part
-              onPost={()=>{
-                handlePost(PART_DOWN_JSON_NAME, partDownSubjects);
-              }}
-              onDownload={()=>{
-                apiUtils.handleDownload(PART_DOWN_JSON_NAME, partDownSubjects)
-              }}
-              subjects={partDownSubjects}
-              onSetSubjects={handleSetPartDownSubjects}
-            />
-          </div>
-          )
-        }}/>
-
-        <Route path="/tmp" render={() => {
-          return (
-          <div>
-            <Part
-              onPost={()=>{
-                handlePost(PART_TMP_JSON_NAME, partTmpSubjects);
-              }}
-              onDownload={()=>{
-                apiUtils.handleDownload(PART_TMP_JSON_NAME, partTmpSubjects)
-              }}
-              subjects={partTmpSubjects}
-              onSetSubjects={handleSetPartTmpSubjects}
-            />
-          </div>
-          )
-        }}/>
-
-        <Route path="/notes" render={() => {
-          return (
-          <div>
-            <Notes
-              onPost={()=>{
-                handlePost(NOTE_JSON_NAME, notes);
-              }}
-              onDownload={()=>{
-                apiUtils.handleDownload(NOTE_JSON_NAME, notes);
-              }}
-              notes={notes}
-              onSetNotes={handleSetNotes}
-            />
-          </div>
-          )
-        }}/>
-
-      </Switch>
 
       <br/>
       <br/>
