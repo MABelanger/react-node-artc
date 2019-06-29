@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as apiUtils from './apiUtils';
 
-import { useStatusPost } from './statusPost';
-
-
 import {
   PART_UP_JSON_NAME,
   PART_DOWN_JSON_NAME,
@@ -11,14 +8,12 @@ import {
   NOTE_JSON_NAME
 } from '../constants';
 
-export const useHttp = (dependencies ) => {
+export const useHttp = (notifySuccessPost, notifyErrorPost, dependencies ) => {
 
   const [partUpSubjects, setPartUpSubjects] = useState([]);
   const [partDownSubjects, setPartDownSubjects] = useState([]);
   const [partTmpSubjects, setPartTmpSubjects] = useState([]);
   const [notes, setNotes] = useState([]);
-
-  const [isSuccessPost, isErrorPost, notifySuccessPost, notifyErrorPost] = useStatusPost([]);
 
   function handlePost(jsonName, partSubjects){
     apiUtils.handlePost(jsonName, partSubjects)

@@ -27,7 +27,7 @@ export default function SwitchParts(props) {
     setNotes,
     handlePost,
     handleDownload
-  ] = useHttp([]);
+  ] = useHttp(props.notifySuccessPost, props.notifyErrorPost, []);
 
 
 
