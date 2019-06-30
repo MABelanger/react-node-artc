@@ -22,9 +22,8 @@ const Notes = ({ notes, onDelNote }) => {
   return notes.slice(0).reverse().map((note, indexMap) => {
     let index = notes.length - indexMap - 1;
     return (
-      <tbody>
-        <Note key={index}
-              index={index}
+      <tbody key={index}>
+        <Note index={index}
               note={note}
               onDelNote={onDelNote}
         />
