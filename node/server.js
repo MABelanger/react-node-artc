@@ -248,14 +248,16 @@ function handleUploadImage(req, res, next) {
     const fileName = _getFileName(files.length, originalName, 'jpg');
     const targetPath = path.join(mediaDir, fileName);
 
+    const MAX_SIZE = 300;
     sharp(tempPath)
-      .resize(300, 300, {
+      .resize(MAX_SIZE, MAX_SIZE, {
         fit: sharp.fit.inside,
         withoutEnlargement: true
       })
       .toFile(targetPath)
       .then( (ImageResult) => {
-          res.status(200).json({message: 'file saved'});
+        let imagePath = '/medias/' + fileName;
+        res.status(200).json({imagePath});
       })
       .catch(()=>{
         res.status(400).json({message: 'Error'});
@@ -272,7 +274,7 @@ app.get('/image', function(req, res){
   fs.readdir(mediaDir, (err, files) => {
     for(file of files){
       if(file != 'tmp'){
-        filePaths.push('medias/' + file);
+        filePaths.push('/medias/' + file);
       }
     }
     res.status(200).json(filePaths);

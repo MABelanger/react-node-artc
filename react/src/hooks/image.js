@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 
 import * as apiUtils from './apiUtils';
 
-
-
-
 export const useImage = (dependencies) => {
 
-  const [images, setImages] = useState([]);
+  const [imagePaths, setImagePaths] = useState([]);
 
   function fetchImages() {
-
+    fetch('/image', {
+      method: 'GET'
+    })
+    .then(res => res.json())
+    .then(imagePaths => {
+      setImagePaths(imagePaths)
+    })
   }
 
   function handleUploadImage (e) {
@@ -19,7 +22,7 @@ export const useImage = (dependencies) => {
      const formData = new FormData();
 
      files.forEach((file, i) => {
-       formData.append(i, file)
+       formData.append(i, file);
      })
 
      fetch('/image', {
@@ -27,8 +30,9 @@ export const useImage = (dependencies) => {
        body: formData
      })
      .then(res => res.json())
-     .then(images => {
-       setImages(images)
+     .then(json => {
+       let { imagePath } = json;
+       setImagePaths([...imagePaths, imagePath])
      })
    }
 
@@ -36,6 +40,6 @@ export const useImage = (dependencies) => {
     fetchImages()
   }, dependencies);
 
-  return [images, handleUploadImage];
+  return [imagePaths, handleUploadImage];
 
 }
