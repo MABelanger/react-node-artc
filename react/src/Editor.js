@@ -12,7 +12,25 @@ import { useStatusPost } from './hooks/statusPost';
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
 
+  const [isLock, setLock] = useState(true);
+  const [numberClick, setNumberClick] = useState(1);
+
   const [isSuccessPost, isErrorPost, notifySuccessPost, notifyErrorPost] = useStatusPost();
+
+
+  function handleUnlock() {
+    if(numberClick === 5) {
+      setLock(false);
+      setNumberClick(0);
+    } else {
+      setNumberClick(numberClick+1);
+    }
+  }
+
+  function handleLock() {
+    setLock(true);
+  }
+
   function renderHidden() {
     return(
       <style>{`
@@ -23,6 +41,14 @@ const Editor = (props) => {
     )
   }
 
+  if(isLock) {
+    return (
+      <div style={{width: '50px', height: '50px'}}
+           onClick={handleUnlock}>
+
+      </div>
+    )
+  }
   return (
     <div>
 
@@ -40,6 +66,7 @@ const Editor = (props) => {
 
       <QtSections />
 
+      <button onClick={handleLock}>Lock</button>
       <br/>
       <br/>
       <div onClick={()=>{
