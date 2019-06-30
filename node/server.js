@@ -220,7 +220,6 @@ app.post('/notes.json', function(req, res, next) {
   }
 });
 
-
 function getPadingZeroNumber(num, size) {
     var s = num+"";
     while (s.length < size) s = "0" + s;
@@ -250,19 +249,18 @@ function handleUploadImage(req, res, next) {
     const targetPath = path.join(mediaDir, fileName);
 
     sharp(tempPath)
-    .resize(300, 300, {
-      fit: sharp.fit.inside,
-      withoutEnlargement: true
-    })
-    .toFile(targetPath)
-    .then( (ImageResult) => {
-        res.status(200).json({message: 'file saved'});
-    })
-    .catch(()=>{
-      res.status(400).json({message: 'Error'});
-    })
+      .resize(300, 300, {
+        fit: sharp.fit.inside,
+        withoutEnlargement: true
+      })
+      .toFile(targetPath)
+      .then( (ImageResult) => {
+          res.status(200).json({message: 'file saved'});
+      })
+      .catch(()=>{
+        res.status(400).json({message: 'Error'});
+      })
   })
-
 }
 
 // the file is called 0
@@ -279,7 +277,6 @@ app.get('/image', function(req, res){
     }
     res.status(200).json(filePaths);
   })
-
 })
 
 app.use('/medias', express.static("db/medias"));
