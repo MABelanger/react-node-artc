@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "npx nodemon server.js </dev/null --ignore 'db/*.json' --ignore 'db/medias/*' --ignore 'sessions/*.json'",
+    "serverDev": "npx nodemon server.js </dev/null --ignore 'db/*.json' --ignore 'db/medias/*' --ignore 'sessions/*.json'",
+    "server": "npx forever -o ./logs/out.log -e ./logs/err.log start server.js",
     "start": "npm run server"
   },
   "author": "",
