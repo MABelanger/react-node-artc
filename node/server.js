@@ -248,7 +248,7 @@ function handleUploadImage(req, res, next) {
     const fileName = _getFileName(files.length, originalName, 'jpg');
     const targetPath = path.join(mediaDir, fileName);
 
-    const MAX_SIZE = 300;
+    const MAX_SIZE = 360;
     sharp(tempPath)
       .resize(MAX_SIZE, MAX_SIZE, {
         fit: sharp.fit.inside,
