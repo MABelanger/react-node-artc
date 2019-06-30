@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 import { useHttp } from './hooks/http';
 import Part from './Part';
 import Notes from './Notes';
+import Loa from './Loa';
 
 
 import {
@@ -113,6 +114,14 @@ export default function SwitchParts(props) {
               notes={notes}
               onSetNotes={handleSetNotes}
             />
+          </div>
+          )
+        }}/>
+
+        <Route path="/loa" render={() => {
+          return (
+          <div>
+            <Loa />
           </div>
           )
         }}/>

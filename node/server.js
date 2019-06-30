@@ -1,3 +1,5 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
@@ -11,6 +13,11 @@ const FileStore = require('session-file-store')(session);
 const utils = require('./utils');
 const dotenv = require('dotenv');
 
+
+const upload = multer({
+  dest: 'db/medias/tmp/'
+  // you might also want to set some limits: https://github.com/expressjs/multer#limits
+});
 
 // read .env file and add it to process.env
 dotenv.config();
@@ -212,6 +219,34 @@ app.post('/notes.json', function(req, res, next) {
     handleGetNeedToLogin(res);
   }
 });
+
+function handleUploadImage(req, res, next) {
+  const tempPath = req.file.path;
+  const targetPath = path.join(__dirname, '/db/medias/image.png');
+
+  console.log('tempPath', tempPath);
+  console.log('targetPath', targetPath);
+
+  function handleError (err, res) {
+    res.status(400).json({message: 'Error'});
+  };
+
+  sharp(tempPath)
+  .resize(300, 300, {
+    fit: sharp.fit.inside,
+    withoutEnlargement: true
+  })
+  .toFile(targetPath)
+  .then( (ImageResult) => {
+      res.status(200).json({message: 'file saved'});
+  })
+  .catch(()=>{
+    res.status(400).json({message: 'Error'});
+  })
+
+}
+
+app.post('/image', upload.single("0"), handleUploadImage);
 
 app.get('/user', function(req, res){
   let isAuthenticated = req.isAuthenticated();

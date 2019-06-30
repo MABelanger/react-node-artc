@@ -1,38 +1,46 @@
 import React from 'react';
+
+function getActiveClassName(pathname, currentPathname) {
+  return pathname == currentPathname ? "active" : ""
+}
 function NavTabs({pathname, history}) {
-  const upActiveClassName = pathname == '/up' ? "active" : "";
-  const downActiveClassName = pathname == '/down' ? "active" : "";
-  const tmpActiveClassName = pathname == '/tmp' ? "active" : "";
-  const notesActiveClassName = pathname == '/notes' ? "active" : "";
+
   return (
     <ul className="nav nav-tabs">
       <li className="nav-item">
-        <a className={"nav-link " + upActiveClassName}
+        <a className={"nav-link " + getActiveClassName('/up', pathname)}
             onClick={()=>{
               history.push("/up");
             }}
         >UP</a>
       </li>
       <li className="nav-item">
-        <a className={"nav-link " + downActiveClassName}
+        <a className={"nav-link " + getActiveClassName('/down', pathname)}
             onClick={()=>{
               history.push("/down");
             }}
         >Down</a>
       </li>
       <li className="nav-item">
-        <a className={"nav-link " + tmpActiveClassName}
+        <a className={"nav-link " + getActiveClassName('/tmp', pathname)}
             onClick={()=>{
               history.push("/tmp");
             }}
         >Tmp</a>
       </li>
       <li className="nav-item">
-        <a className={"nav-link " + notesActiveClassName}
+        <a className={"nav-link " + getActiveClassName('/notes', pathname)}
             onClick={()=>{
               history.push("/notes");
             }}
         >Notes</a>
+      </li>
+      <li className="nav-item">
+        <a className={"nav-link " + getActiveClassName('/loa', pathname)}
+            onClick={()=>{
+              history.push("/loa");
+            }}
+        >Loa</a>
       </li>
     </ul>
   );

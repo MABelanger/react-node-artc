@@ -9,19 +9,21 @@ import StatusPost from './StatusPost';
 
 import { useStatusPost } from './hooks/statusPost';
 
+const INIT_NUMBER_CLICK = 1;
+
 const Editor = (props) => {
   const [isPrintMode, setPrintMode] = useState(false);
 
-  const [isLock, setLock] = useState(true);
-  const [numberClick, setNumberClick] = useState(1);
+  const [isLock, setLock] = useState(false);
+  const [numberClick, setNumberClick] = useState(INIT_NUMBER_CLICK);
 
   const [isSuccessPost, isErrorPost, notifySuccessPost, notifyErrorPost] = useStatusPost();
 
 
   function handleUnlock() {
-    if(numberClick === 5) {
+    if(numberClick >= 5) {
       setLock(false);
-      setNumberClick(0);
+      setNumberClick(INIT_NUMBER_CLICK);
     } else {
       setNumberClick(numberClick+1);
     }
@@ -41,52 +43,56 @@ const Editor = (props) => {
     )
   }
 
-  if(isLock) {
-    return (
-      <div style={{width: '50px', height: '50px'}}
+  function handlePrintMode() {
+    setPrintMode(!isPrintMode);
+  }
+
+  const visibilityLock = !isLock ? {height: '0px'}: {};
+  const visibilityEditor = isLock ? {visibility: 'hidden'}: {visibility: 'inherit'};
+
+  return (
+    <>
+      <div style={{width: '50px', height: '50px', ...visibilityLock}}
            onClick={handleUnlock}>
+      </div>
+
+      <div style={visibilityEditor}>
+
+        <StatusPost
+          isSuccessPost={isSuccessPost}
+          isErrorPost={isErrorPost}
+        />
+
+        <NavTabs
+          pathname={props.location.pathname}
+          history={props.history}
+        />
+
+        { isPrintMode && renderHidden() }
+
+        <QtSections />
+
+        <button onClick={handleLock}>Lock</button>
+        <br/>
+        <br/>
+        <div onClick={handlePrintMode}>
+          printMode
+        </div>
+
+
+        <SwitchParts
+          notifySuccessPost={notifySuccessPost}
+          notifyErrorPost={notifyErrorPost}
+        />
+
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
 
       </div>
-    )
-  }
-  return (
-    <div>
-
-      <StatusPost
-        isSuccessPost={isSuccessPost}
-        isErrorPost={isErrorPost}
-      />
-
-      <NavTabs
-        pathname={props.location.pathname}
-        history={props.history}
-      />
-
-      { isPrintMode && renderHidden() }
-
-      <QtSections />
-
-      <button onClick={handleLock}>Lock</button>
-      <br/>
-      <br/>
-      <div onClick={()=>{
-        console.log('isPrintMode', isPrintMode);
-        setPrintMode(!isPrintMode);
-      }}>printMode</div>
-
-
-      <SwitchParts
-        notifySuccessPost={notifySuccessPost}
-        notifyErrorPost={notifyErrorPost}
-      />
-
-
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-
-    </div>
+    </>
   );
 }
 
