@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import * as apiUtils from './apiUtils';
-
 export const useImage = (dependencies) => {
 
   const [imagePaths, setImagePaths] = useState([]);
