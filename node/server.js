@@ -220,33 +220,69 @@ app.post('/notes.json', function(req, res, next) {
   }
 });
 
-function handleUploadImage(req, res, next) {
-  const tempPath = req.file.path;
-  const targetPath = path.join(__dirname, '/db/medias/image.png');
 
-  console.log('tempPath', tempPath);
-  console.log('targetPath', targetPath);
+function getPadingZeroNumber(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+function _getFileName(fileNumber, originalName, extention) {
+  // strip extention from originalName
+  const noSpaceName = originalName.split(' ').join('_');
+  const baseName = noSpaceName.split('.').slice(0, -1).join('.');
+  return 'img' + '-' + getPadingZeroNumber(fileNumber, 3) + '-' + baseName + '.' + extention;
+}
+
+function handleUploadImage(req, res, next) {
+  const originalName = req.file.originalname;
+  const tempPath = req.file.path;
 
   function handleError (err, res) {
     res.status(400).json({message: 'Error'});
   };
 
-  sharp(tempPath)
-  .resize(300, 300, {
-    fit: sharp.fit.inside,
-    withoutEnlargement: true
-  })
-  .toFile(targetPath)
-  .then( (ImageResult) => {
-      res.status(200).json({message: 'file saved'});
-  })
-  .catch(()=>{
-    res.status(400).json({message: 'Error'});
+  let mediaDir = path.join(__dirname, '/db/medias');
+
+  fs.readdir(mediaDir, (err, files) => {
+
+    const fileName = _getFileName(files.length, originalName, 'jpg');
+    const targetPath = path.join(mediaDir, fileName);
+
+    sharp(tempPath)
+    .resize(300, 300, {
+      fit: sharp.fit.inside,
+      withoutEnlargement: true
+    })
+    .toFile(targetPath)
+    .then( (ImageResult) => {
+        res.status(200).json({message: 'file saved'});
+    })
+    .catch(()=>{
+      res.status(400).json({message: 'Error'});
+    })
   })
 
 }
 
-app.post('/image', upload.single("0"), handleUploadImage);
+// the file is called 0
+app.post('/image', upload.single('0'), handleUploadImage);
+
+app.get('/image', function(req, res){
+  const mediaDir = path.join(__dirname, '/db/medias');
+  let filePaths = [];
+  fs.readdir(mediaDir, (err, files) => {
+    for(file of files){
+      if(file != 'tmp'){
+        filePaths.push('medias/' + file);
+      }
+    }
+    res.status(200).json(filePaths);
+  })
+
+})
+
+app.use('/medias', express.static("db/medias"));
 
 app.get('/user', function(req, res){
   let isAuthenticated = req.isAuthenticated();
