@@ -60,6 +60,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Headers to enable Cross-origin resource sharing (CORS)
 let middlewareCors = require('./middlewares/cors');
 let middlewareUserAgent = require('./middlewares/userAgent');
+let middlewareAuth = require('./middlewares/auth');
 
 app.use(middlewareCors);
 app.use(middlewareUserAgent);
@@ -220,17 +221,11 @@ app.post('/notes.json', function(req, res, next) {
   }
 });
 
-function getPadingZeroNumber(num, size) {
-    var s = num+"";
-    while (s.length < size) s = "0" + s;
-    return s;
-}
-
 function _getFileName(fileNumber, originalName, extention) {
   // strip extention from originalName
   const noSpaceName = originalName.split(' ').join('_');
   const baseName = noSpaceName.split('.').slice(0, -1).join('.');
-  return 'img' + '-' + getPadingZeroNumber(fileNumber, 3) + '-' + baseName + '.' + extention;
+  return 'img' + '-' + utils.getPadingZeroNumber(fileNumber, 3) + '-' + baseName + '.' + extention;
 }
 
 function handleUploadImage(req, res, next) {
@@ -281,7 +276,7 @@ app.get('/image', function(req, res){
   })
 })
 
-app.use('/medias', express.static("db/medias"));
+app.use('/medias', middlewareAuth, express.static("db/medias"));
 
 app.get('/user', function(req, res){
   let isAuthenticated = req.isAuthenticated();
